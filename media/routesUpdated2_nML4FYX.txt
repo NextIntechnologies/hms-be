@@ -1,0 +1,534 @@
+
+
+AUTH ROUTES
+---------------
+
+1. route to request-otp
+   POST http://localhost:8000/api/auth?action=request-otp 
+   payload: 
+   {
+     "email": "ririmi@imagepoet.net"
+   }
+   
+   response:
+    status:201
+	{
+     "message": "OTP send successfull!"
+    }
+	
+	
+2. route to verify-otp
+   POST http://localhost:8000/api/auth?action=verify-otp
+   
+   payload: 
+   {
+     "email": "ririmi@imagepoet.net",
+	 "otp": "814565"
+   }
+   
+   response:
+    status:201
+	{
+     "message": "OTP successfully verified"
+    }
+   
+   
+3. route to register
+   POST http://localhost:8000/api/auth?action=register
+	
+   payload: 
+   {
+     "email": "ririmi@imagepoet.net",
+     "password": "814565"
+   }
+   
+   response:
+    status:201
+	{
+     "message": "User with id: ririmi@imagepoet.net is successfully registered"
+    }	
+	
+4. route to login
+   POST http://localhost:8000/api/auth?action=login
+   
+   payload: 
+   {
+     "email": "ririmi@imagepoet.net",
+     "password": "814565"
+   }
+   
+   response:
+    status:200
+   {
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoicmlyaW1pQGltYWdlcG9ldC5uZXQiLCJpZCI6IjY1NzM0YjA4YzBmZGU0NWJjZDQ4YTQwMyJ9LCJpYXQiOjE3MDIwNTQ3NjgsImV4cCI6MTcwMjA4MzU2OH0.xD6Y8xZ_OzZbs45AAigNjjHL_Wrh6HTtmc7YST2mhT8"
+   }
+   
+   
+ In this login route u will get the token that u need to pass as header further on
+
+	Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoicmlyaW1pQGltYWdlcG9ldC5uZXQiLCJpZCI6IjY1NzM0YjA4YzBmZGU0NWJjZDQ4YTQwMyJ9LCJpYXQiOjE3MDIwNTQ3NjgsImV4cCI6MTcwMjA4MzU2OH0.xD6Y8xZ_OzZbs45AAigNjjHL_Wrh6HTtmc7YST2mhT8     
+	
+	
+
+ROUTES TO CREATE TENDERS
+
+1 route to create tender rows
+  POST	http://localhost:8000/api/tenders
+  
+  payload:
+  {
+  "tendertitle":"tender1",
+  "tendernumber":"1234",
+  "closingdateandtime":"12/09/2025 12:00",
+  "deptname":"rly",
+  "workName": "test",
+  "validity": "60(days)",
+  "completionPeriod": "12(months)",
+  "biddingsystem":"Two Packet"
+}
+in the above payload tendertitle and tendernumber are mandatory
+
+	response:
+	 status:201
+	 {
+  "tendertitle": "tender1",
+  "workName": "test",
+  "validity": "60(days)",
+  "completionPeriod": "12(months)",
+  "tendernumber": "1234",
+  "closingdateandtime": "12/09/2025 12:00",
+  "deptname": "rly",
+  "createdBy": "ririmi@imagepoet.net",
+  "biddingsystem": "Two Packet",
+  "user_id": "65734b08c0fde45bcd48a403",
+  "uploadpath": "na",
+  "actions": "upload",
+  "_id": "65734e89c0fde45bcd48a408",
+  "createdAt": "2023-12-08T17:12:41.914Z",
+  "updatedAt": "2023-12-08T17:12:41.914Z",
+  "__v": 0
+}
+
+
+2 route to get list of all tenders
+
+	GET http://localhost:8000/api/tenders
+	
+	response:
+	 status: 200
+[
+  {
+    "_id": "6573053990b892e39993cb4c",
+    "tendertitle": "tender2",
+    "tendernumber": "1234",
+    "closingdateandtime": "12/09/2025 12:00",
+    "deptname": "rly",
+    "createdBy": "wihalory@yogrow.co",
+    "biddingsystem": "Two Packet",
+    "user_id": "6571a0e40c68ed4101dc3285",
+    "uploadpath": "uploads\\6573053990b892e39993cb4c\\admin-uploads\\wihalory@yogrow.co\\6573053990b892e39993cb4c\\wihalory@yogrow.co-1702037704556-Non-Us Communication RSU Vesting with tax collected.pdf",
+    "actions": "delete",
+    "createdAt": "2023-12-08T11:59:53.683Z",
+    "updatedAt": "2023-12-08T12:15:04.563Z",
+    "__v": 0
+  },
+  {
+    "_id": "65734e89c0fde45bcd48a408",
+    "tendertitle": "tender1",
+    "workName": "test",
+    "validity": "60(days)",
+    "completionPeriod": "12(months)",
+    "tendernumber": "1234",
+    "closingdateandtime": "12/09/2025 12:00",
+    "deptname": "rly",
+    "createdBy": "ririmi@imagepoet.net",
+    "biddingsystem": "Two Packet",
+    "user_id": "65734b08c0fde45bcd48a403",
+    "uploadpath": "na",
+    "actions": "upload",
+    "createdAt": "2023-12-08T17:12:41.914Z",
+    "updatedAt": "2023-12-08T17:12:41.914Z",
+    "__v": 0
+  },
+  {
+    "_id": "65734f7fc0fde45bcd48a40b",
+    "tendertitle": "tender2",
+    "workName": "test",
+    "validity": "60(days)",
+    "completionPeriod": "12(months)",
+    "tendernumber": "1234",
+    "closingdateandtime": "12/09/2025 12:00",
+    "deptname": "rly",
+    "createdBy": "ririmi@imagepoet.net",
+    "biddingsystem": "Two Packet",
+    "user_id": "65734b08c0fde45bcd48a403",
+    "uploadpath": "na",
+    "actions": "upload",
+    "createdAt": "2023-12-08T17:16:47.947Z",
+    "updatedAt": "2023-12-08T17:16:47.947Z",
+    "__v": 0
+  }
+]
+
+3 route to update a tender row
+
+PUT /api/tenders/:id
+
+http://localhost:8000/api/tenders/6573053990b892e39993cb4c
+
+here id is the particular id of the tender row saved in db.In db id gets saved as _id
+
+in response u will get the json for updated tender row;
+
+4 route to delete a tender row
+
+DELETE /api/tenders/:id
+
+http://localhost:8000/api/tenders/6573053990b892e39993cb4c
+
+response :
+status:200
+
+{
+  "message": "tender2 successfully deleted"
+}
+
+5 upload doc POST /api/tenders/upload/:id (here id is tenders id)this is for admin to upload any document for a tender.
+
+6 delete doc DELETE /api/tenders/delete/:id (here id is tenders id)this is for admin to delete the uploaded document for the tender
+
+7 to get details of a particular tender GET /api/tenders/:id
+
+
+
+
+ELIGIBILITY/COMPLIANCE TAB (for admin to add rows)
+
+1 POST
+
+/api/tendersdata/:id (admin route to add description of data requuired by client to provide for a tender, id is a tender id)
+e.g. http://permean-peak.onrender.com/api/tendersdata/6573053990b892e39993cb4c
+
+payload:
+{
+"description": "test",  (description is compulsory)
+"remarks": "na", (required and default value should be na).
+"complied" "abc",
+"actions":"mandatory",  (actions is compulsary and it needs to be dropdown containing only "mandatory" and "non-mandatory")
+"datatab":"eligibility"  (datatab u should pass from frontend and should not be in gui, datatab can have 'eligibility', 'technicalCompliance','commercialCompliance')
+}
+
+response:
+status: 200
+{
+    "description": "test",
+    "remarks": "na",
+	"complied" "abc",
+    "actions": "mandatory",
+    "createdBy": "zokalyqi@pelagius.net",
+    "tender_id": "6573053990b892e39993cb4c",
+    "datatab": "eligibility",
+    "_id": "657b3b221aff2053a10c179e",
+    "createdAt": "2023-12-14T17:28:02.285Z",
+    "updatedAt": "2023-12-14T17:28:02.285Z",
+    "__v": 0
+}
+
+2 api/tendersdata/:id?:d_id (admin route to update description of data requuired by client to provide for a tender, id is a tender id, d_id is description id)
+
+3 api/tendersdata/:id?:d_id (admin route to delete description of data requuired by client to provide for a tender, id is a tender id, d_id is description id)
+
+4 /api/tendersdata/:id (admin/client route to get all description of data(added by admin) requuired by client to provide for a tender, id is a tender id)
+
+
+
+INTEGRATING BANK ACCOUNT OF USER ( CLIENT ROUTE)
+
+1 POST /PUT/DELETE/GET
+/api/bankaccount/:id (id is user id)
+
+payload:
+{
+"accountNumber": "123456",  (mandatory)
+"ifscCode": "SBIN000987",    (mandatory)
+"bankName": "ICICI",  (mandatory)
+"bankAddress": "pakur" (mandatory)
+}
+response:
+status: 200
+{
+  "accountNumber": "123456",
+  "ifscCode": "SBIN000987",
+  "bankName": "ICICI",
+  "bankAddress": "pakur",
+  "user_id": "65789d09f91e349a96126778",
+  "_id": "657b41201aff2053a10c17b1",
+  "createdAt": "2023-12-14T17:53:36.915Z",
+  "updatedAt": "2023-12-14T17:53:36.915Z",
+  "__v": 0
+  
+  
+  
+API ROUTES FOR CLIENT TO UPLOAD AND DELETE DOCUMENT FOR ELIGIBILITY/COMPLIANCE TAB.
+
+  POST
+ /api/docs/:id/:d_id/upload 
+ (it is the route for client to upload a file against a description added by admin in ELIGIBILITY/COMPLIANCE tab , here id is tender id   and d_id is desc id)
+ 
+ 
+ DELETE
+ /api/docs/:id/:d_id/delete 
+ (it is the route for client to delete a file against a description , here id is tender id and d_id is desc id)
+ 
+ 
+ 
+changed response for ROUTE
+GET
+/api/tendersdata/:id  (id is tenders id)
+
+http://localhost:8000/api/tendersdata/657e1fac6074ed852669bbd6
+
+previously it was sending all list of description from all tenders.
+Now it will only send list of description present in that tender and if no description is there it will send empty array.
+
+
+ROUTES FOR FIN TAB
+-------------------
+
+1>   POST,PUT and DELETE for admin
+----------------------------------- 
+
+/api/fintab/:id (id is tenders id)
+
+from the above route admin will enter details in FIN TAB.
+
+payload:
+{
+    "itemDesc": "item1",
+    "itemCode": "1",
+    "itemQuantity": "10000",
+    "quantityUnit": "cum",
+    "unitRate": "1.50",
+    "rebate": "0.23",
+    "advtValue": "123456"
+}
+itemDesc and advtValue are mandatory.
+
+ressponse:
+201:
+{
+    "itemDesc": "item1",
+    "itemCode": "1",
+    "itemQuantity": "10000",
+    "quantityUnit": "cum",
+    "unitRate": "1.50",
+    "rebate": "0.23",
+    "advtValue": "123456",
+    "tender_id": "657e1fac6074ed852669bbd6",
+    "_id": "657f33f7c70e336b22579e68",
+    "createdAt": "2023-12-17T17:46:31.153Z",
+    "updatedAt": "2023-12-17T17:46:31.153Z",
+    "__v": 0
+}
+
+
+2> GET route is for both admin/user
+-----------------------------------
+/api/fintab/:id (id is tenders id)
+response:
+200:
+{
+    "_id": "657f33f7c70e336b22579e68",
+    "itemDesc": "item1",
+    "itemCode": "1",
+    "itemQuantity": "10000",
+    "quantityUnit": "cum",
+    "unitRate": "1.50",
+    "rebate": "0.23",
+    "advtValue": "123456",
+    "tender_id": "657e1fac6074ed852669bbd6",
+    "createdAt": "2023-12-17T17:46:31.153Z",
+    "updatedAt": "2023-12-17T17:46:31.153Z",
+    "__v": 0
+}
+
+and if no records present then it will return 404 status.
+
+3> POST,PUT AND DELETE ROUTE for client to enter data in fintab.
+CLIENTROUTES
+
+/api/fintabuser/:id/:u_id (id is tender id and u_id is user id)
+
+payload:
+{
+    "bidRate": "0.1 %above",
+    "bidAmount": "12222",
+    "netBidValue": "33333"
+}
+response:
+201:
+{
+    "bidRate": "0.1 %above",
+    "bidAmount": "12222",
+    "netBidValue": "33333",
+    "tender_id": "657e1fac6074ed852669bbd6",
+    "user_id": "657d860ea297bbbbdcb30e52",
+    "_id": "657f36a3c70e336b22579e7d",
+    "createdAt": "2023-12-17T17:57:55.788Z",
+    "updatedAt": "2023-12-17T17:57:55.788Z",
+    "__v": 0
+}
+
+GET route /api/fintabuser/:id/:u_id (id is tender id and u_id is user id)
+
+response:
+200:
+{
+    "_id": "657f36a3c70e336b22579e7d",
+    "bidRate": "0.1 %above",
+    "bidAmount": "12222",
+    "netBidValue": "33333",
+    "tender_id": "657e1fac6074ed852669bbd6",
+    "user_id": "657d860ea297bbbbdcb30e52",
+    "createdAt": "2023-12-17T17:57:55.788Z",
+    "updatedAt": "2023-12-17T17:57:55.788Z",
+    "__v": 0
+}
+
+if if no records present then it will return 404 status.
+
+
+
+CLIENT ROUTE TO SUBMIT WHOLE TENDER AFTER after FIN TAB
+
+POST /api/appliedusers/:id (user/client route only to apply for the tender , id is tender id)
+
+http://localhost:8000/api/appliedusers/657f08aec6bc3695c37695e3
+
+no payload in this. 
+
+response:
+201:
+[
+    {
+        "selectedUsers": {
+            "firstPriority": "",
+            "secondPriority": ""
+        },
+        "_id": "657f08aec6bc3695c37695e3",
+        "tendertitle": "Tebde",
+        "workName": "",
+        "validity": "",
+        "completionPeriod": "",
+        "tendernumber": "123",
+        "closingdateandtime": "2023-12-21T14:41:41.904Z",
+        "deptname": "",
+        "createdBy": "zokalyqi@pelagius.net",
+        "biddingsystem": "",
+        "user_id": "65789d09f91e349a96126778",
+        "uploadpath": "na",
+        "actions": "upload",
+        "appliedUsers": [
+            "vybavaca@tutuapp.bid"
+        ],
+        "createdAt": "2023-12-17T14:41:50.598Z",
+        "updatedAt": "2023-12-17T18:07:43.248Z",
+        "__v": 0
+    },
+    {
+        "_id": "657d860ea297bbbbdcb30e52",
+        "email": "vybavaca@tutuapp.bid",
+        "password": "$2b$10$7JH//EdvjRSM2ylPjYXb8uCB4vk0fD1qd3czqnZtdF5qkbRLRZwFW",
+        "role": "user",
+        "createdAt": "2023-12-16T11:12:14.738Z",
+        "updatedAt": "2023-12-17T18:07:43.388Z",
+        "__v": 0,
+        "appliedTenders": [
+            "657f08aec6bc3695c37695e3"
+        ],
+        "acceptedTenders": []
+    }
+]
+array of 2 objs. 1> first is the tender data ,which has appliedUsers field in which user email gets saved.
+                 2> user object in which there is appliedTenders field in which tender id gets saved.
+				 
+				 
+
+
+ROUTE TO UPLOAD DATA IN ATTACH DOC TAB  (for attach doc tab id and d_id both are tender id ) ***imp
+---------------------------------------
+
+POST
+/api/docs/:id/:d_id/upload  (client is uploading on its free will and  id and d_id both are tender id here).
+payload:
+this should be as form data
+{
+"title": "abc"
+}
+payload is optional
+
+e.g for attach doc tab
+http://localhost:8000/api/docs/657f08aec6bc3695c37695e3/657f08aec6bc3695c37695e3/upload
+
+DELETE
+/api/docs/:id/:d_id/delete  (client is deleting on its free will and  id and d_id both are tender id here)
+
+
+ROUTE TO GET DETAILS OF ALL UPLOADED FILES BY CLIENT 
+---------------------------------------------------------------
+1>
+GET
+// /api/uploadedFiles/:id/:t_id (route to get details of all client uploaded files for a tender,id is user id and t_id is tender id).
+
+response :array of objs.
+200
+[
+    {
+        "_id": "657f3c16c70e336b22579ea3",
+        "title": "test",
+        "user_id": "657d860ea297bbbbdcb30e52",
+        "tender_id": "657f08aec6bc3695c37695e3",
+        "desc_id": "657f08aec6bc3695c37695e3",
+        "filename": "contract_test.pdf",
+        "filepath": "uploads\\657f08aec6bc3695c37695e3\\user-uploads\\vybavaca@tutuapp.bid\\657f08aec6bc3695c37695e3\\vybavaca@tutuapp.bid-1702837269932-contract_test.pdf",
+        "createdAt": "2023-12-17T18:21:10.141Z",
+        "updatedAt": "2023-12-17T18:21:10.141Z",
+        "__v": 0
+    }
+]
+
+2>
+GET
+
+// /api/uploadedFiles/:id/:t_id/:d_id route to get details of a uploaded file by a client against a desc.
+
+ROUTE to get details of a particular uploaded file by client against a particular description(eligibility/compliance tab)
+
+Now for attach doc tab d_id == tender_id 
+
+response for attach doc tab:
+200:
+{
+    "_id": "657f3c16c70e336b22579ea3",
+    "title": "test",
+    "user_id": "657d860ea297bbbbdcb30e52",
+    "tender_id": "657f08aec6bc3695c37695e3",
+    "desc_id": "657f08aec6bc3695c37695e3",
+    "filename": "contract_test.pdf",
+    "filepath": "uploads\\657f08aec6bc3695c37695e3\\user-uploads\\vybavaca@tutuapp.bid\\657f08aec6bc3695c37695e3\\vybavaca@tutuapp.bid-1702837269932-contract_test.pdf",
+    "createdAt": "2023-12-17T18:21:10.141Z",
+    "updatedAt": "2023-12-17T18:21:10.141Z",
+    "__v": 0
+}
+
+3>
+GET to download a uploaded document
+// /api/uploadedFiles/download/:id/:t_id/:d_id route to download a file uploaded by client against a particular description of a tender (id is of that of user and t_id is that of tender id and d_id is that of id of desc)
+
+
+ 				 
+
+
+
+ 
