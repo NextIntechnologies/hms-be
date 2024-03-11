@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserTwo, Patient, Report, Doctor, Appointment, Staff, Inventry, Bed, Billing
+from .models import UserTwo, Patient, Report, Doctor, Appointment, Staff, Inventry, Bed, Billing,Otp
 import json
 from django.http import QueryDict
 from django.core.mail import send_mail
@@ -9,6 +9,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime
 from django.utils import timezone
+import random
 
 def generate_bill(customer_name, items, total_amount, output_file):
     # Create PDF document
@@ -66,10 +67,17 @@ def forget_password(request):
             user = UserTwo.objects.filter(email=request_data['email'])
             if not user:
                 return JsonResponse({ 'message': 'User does not exist'}, status=400)
+
+            otpNumber = str(random.randint(1000,9999))
+            otp = Otp(
+                email = request_data['email'],
+                otp = otp
+            )
+            otp.save()
             
             send_mail(
-                subject='Otp for password reset',
-                message='Your otp is 1234',
+                subject='Otp for forget password ',
+                message='Your otp is '+ otpNumber ,
                 recipient_list=[request_data['email']],
                 from_email='<from-email>'
             )
@@ -81,6 +89,12 @@ def forget_password(request):
         if not user:
             return JsonResponse({ 'message': 'User does not exist'}, status=400)
         user = user[0]
+        otp = Otp.objects.filter(email=request_data['email'])
+        if not otp:
+            return JsonResponse({ 'message': 'Otp does not exist'}, status=400)
+        otp = otp[0]
+        if otp.otp != request_data['otp']:
+            return JsonResponse({ 'message': 'Incorrect otp'}, status=400)
         user.password = request_data['password']
         user.save()
         return JsonResponse({'message': 'Password updated successfully'}, status=200)
@@ -254,12 +268,14 @@ def appointment(request):
             status = request_data['status'],
         )
         appointment.save()
-        send_mail(
-            subject='Appointment Confirmation',
-            message='Your appointment is confirmed with Dr. '+appointment.doctor.name+' on '+appointment.date+' at '+appointment.time,
-            recipient_list=[appointment.patient.email],
-            from_email='<from-email>'
-        )
+
+        if request_data['status'] == 'confirmed':
+            send_mail(
+                subject='Appointment Confirmation',
+                message='Your appointment is confirmed with Dr. '+appointment.doctor.name+' on '+appointment.date+' at '+appointment.time,
+                recipient_list=[appointment.patient.email],
+                from_email='<from-email>'
+            )
         return JsonResponse({'message': 'Appointment added successfully'}, status=200)
 
     if request.method == 'GET':
@@ -288,6 +304,13 @@ def appointment(request):
         appointment.time = request_data['time']
         appointment.status = request_data['status']
         appointment.save()
+        if request_data['status'] == 'confirmed':
+            send_mail(
+                subject='Appointment Confirmation',
+                message='Your appointment is confirmed with Dr. '+appointment.doctor.name+' on '+appointment.date+' at '+appointment.time,
+                recipient_list=[appointment.patient.email],
+                from_email='<from-email>'
+            )
         return JsonResponse({'message': 'Appointment updated successfully'}, status=200)
 
     if request.method == 'DELETE':
@@ -532,15 +555,35 @@ def patient_login(request):
             patient = Patient.objects.filter(email=request_data['email'])
             if not patient:
                 return JsonResponse({ 'message': 'Patient does not exist'}, status=400)
+
+            otpNumber = str(random.randint(1000,9999))
+            otp = Otp.objects.filter(email=request_data['email'])
+            if otp:
+                otp = otp[0]
+                otp.otp = otpNumber
+                otp.save()
+
+            else:
+                otp = Otp(
+                    email = request_data['email'],
+                    otp = otpNumber
+                )
+                otp.save()
             
             send_mail(
                 subject='Otp for password reset',
-                message='Your otp is 1234',
+                message='Your otp is '+otpNumber,
                 recipient_list=[request_data['email']],
                 from_email='<from-email>'
             )
             return JsonResponse({'message': 'Password sent to email'}, status=200)
         if request_data['action']=='verifyOtp':
+            otp = Otp.objects.filter(email=request_data['email'])
+            if not otp:
+                return JsonResponse({ 'message': 'Otp does not exist'}, status=400)
+            otp = otp[0]
+            if otp.otp != request_data['otp']:
+                return JsonResponse({ 'message': 'Incorrect otp'}, status=400)
             patient = Patient.objects.filter(email=request_data['email'])
             response={
                 'id': patient[0].id,
@@ -640,3 +683,55 @@ def patientRecords(request, id):
             })
 
         return JsonResponse({'patientDetails': response}, status=200)
+
+@csrf_exempt
+def patient_register(request):
+    if request.method == 'POST':
+        request_data = json.loads(request.body.decode('utf-8'))
+        if request_data['action']=='sendOtp':
+
+            patient = Patient.objects.filter(email=request_data['email'])
+            if patient:
+                return JsonResponse({ 'message': 'Patient already registered'}, status=400)
+            
+            otpNumber = str(random.randint(1000,9999))
+            otp = Otp.objects.filter(email=request_data['email'])
+            if otp:
+                otp = otp[0]
+                otp.otp = otpNumber
+                otp.save()
+            else:
+                otp = Otp(
+                    email = request_data['email'],
+                    otp = otpNumber
+                )
+                otp.save()
+            send_mail(
+                subject='Otp for password reset',
+                message='Your otp is '+str(otpNumber),
+                recipient_list=[request_data['email']],
+                from_email='<from-email>'
+            )
+            return JsonResponse({'message': 'otp sent to email'}, status=200)
+        if request_data['action']=='verifyOtp':
+            otp = Otp.objects.filter(email=request_data['email'])
+            if not otp:
+                return JsonResponse({ 'message': 'Otp does not exist'}, status=400)
+            otp = otp[0]
+            if otp.otp != request_data['otp']:
+                return JsonResponse({ 'message': 'Incorrect otp'}, status=400)
+            return JsonResponse({'message': 'Otp verified successfully'}, status=200)
+        
+        if request_data['action']=='completeProfile':
+            patient = Patient(
+                name = request_data['name'],
+                department = request_data['department'],
+                dob = request_data['dob'],
+                gender = request_data['gender'],
+                email = request_data['email'],
+                phone = request_data['phone'],
+            )
+            patient.save()
+            return JsonResponse({'message': 'Patient added successfully'}, status=200)
+
+            

@@ -15,6 +15,7 @@ urlpatterns = [
     path('forget-password', views.forget_password, name='index'),
     path('billings', views.billing, name='index'),
     path('patient-login', views.patient_login, name='index'),
+    path('patient-register', views.patient_register, name='index'),
     path('activities', views.activity, name='index'),
     path('categories', views.patientCategory, name='index'),
     path('patient-records/<str:id>', views.patientRecords, name='index'),

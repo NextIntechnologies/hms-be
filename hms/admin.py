@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserTwo, Patient, Report, Doctor, Appointment, Staff, Inventry, Bed, Billing
+from .models import UserTwo, Patient, Report, Doctor, Appointment, Staff, Inventry, Bed, Billing, Otp
 
 
 # Register your models here
@@ -13,3 +13,4 @@ admin.site.register(Staff)
 admin.site.register(Inventry)
 admin.site.register(Bed)
 admin.site.register(Billing)
+admin.site.register(Otp)

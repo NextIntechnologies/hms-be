@@ -78,3 +78,9 @@ class Billing (models.Model):
     dischargeDate = models.CharField(max_length=200)
     costOfTreatment = models.IntegerField(max_length=200)
     bill = models.FileField(upload_to='')
+
+
+class Otp (models.Model):
+    id=models.AutoField(primary_key=True)
+    email = models.CharField(max_length=200)
+    otp = models.CharField(max_length=200)
